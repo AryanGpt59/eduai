@@ -1,4 +1,4 @@
-"""Optional local storage for aggregate session summaries only."""
+"""Optional app-local storage for aggregate session summaries only."""
 
 from __future__ import annotations
 

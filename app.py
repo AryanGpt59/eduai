@@ -16,17 +16,26 @@ from video import analyze_video
 
 st.set_page_config(page_title="EduAI", page_icon="🎓", layout="wide")
 st.title("EduAI")
-st.caption("Local-first classroom presence and activity review")
+st.caption("Classroom presence and activity review")
 st.info(
     "This demo reports anonymous face-location tracks, movement proxies, and optional audio levels. "
     "It does not identify students or measure attention, understanding, or learning."
+)
+st.warning(
+    "Upload notice: selecting video or audio sends it to the machine running this app. In the hosted demo, "
+    "that is Streamlit Community Cloud. Files may contain identifiable students; use only media you are "
+    "authorized to share, and obtain required consent. Video is copied temporarily for analysis and deleted "
+    "afterward; saved summaries contain aggregate metrics only."
 )
 
 page = st.sidebar.radio("View", ["Analyze a session", "Saved summaries"])
 
 if page == "Saved summaries":
-    st.subheader("Local saved summaries")
-    st.caption("Only aggregate counts and settings are stored. Video, audio, images, and track IDs are not saved here.")
+    st.subheader("Saved summaries")
+    st.caption(
+        "Only aggregate counts and settings are stored. Video, audio, images, and track IDs are not saved here. "
+        "In the hosted demo, this database is on the Streamlit server and is not a durable archive."
+    )
     saved = list_summaries()
     if saved:
         st.dataframe(pd.DataFrame(saved), use_container_width=True, hide_index=True)
@@ -38,9 +47,18 @@ if page == "Saved summaries":
             st.success("Saved summaries cleared.")
             st.rerun()
 else:
-    st.subheader("Analyze a local video")
-    video_file = st.file_uploader("Classroom video", type=["mp4", "avi", "mov", "mkv"])
-    audio_file = st.file_uploader("Optional separate audio file (WAV/FLAC/OGG/MP3)", type=["wav", "flac", "ogg", "mp3"])
+    st.subheader("Analyze a video")
+    cloud_acknowledged = st.checkbox(
+        "I understand that selecting media sends it to the server running this app for analysis.",
+        key="cloud_upload_acknowledged",
+    )
+    if cloud_acknowledged:
+        video_file = st.file_uploader("Classroom video", type=["mp4", "avi", "mov", "mkv"])
+        audio_file = st.file_uploader("Optional separate audio file (WAV/FLAC/OGG/MP3)", type=["wav", "flac", "ogg", "mp3"])
+    else:
+        video_file = None
+        audio_file = None
+        st.caption("Confirm the data notice to reveal the media upload controls.")
     col_a, col_b = st.columns(2)
     with col_a:
         confirmation_seconds = st.slider("Observed-time attendance threshold (seconds)", 1, 60, 3)
@@ -147,9 +165,9 @@ else:
         ):
             st.write(f"• {prompt}")
 
-        if st.button("Save aggregate summary on this device"):
+        if st.button("Save aggregate summary to this app"):
             save_summary(summary)
-            st.success("Aggregate summary saved locally.")
+            st.success("Aggregate summary saved to this app's local database.")
 
 st.divider()
 st.caption("Keep teacher judgment central. Review consent, retention, and classroom policy before any real-world use.")

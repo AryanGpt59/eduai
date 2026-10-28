@@ -1,6 +1,6 @@
 # EduAI
 
-An independent, local-first classroom video review demo. This repository was created as a standalone implementation from the supplied product brief; it is not a GitHub fork and does not copy files from the referenced repositories.
+An independent classroom video review demo. This repository was created as a standalone implementation from the supplied product brief; it is not a GitHub fork and does not copy files from the referenced repositories.
 
 ## What it does
 
@@ -34,6 +34,8 @@ On macOS or Linux, activate the virtual environment with `source .venv/bin/activ
 
 Upload a supported MP4, AVI, MOV, or MKV video. Audio is optional and must be uploaded separately. Sampling is limited to about two frames per second and a configurable maximum number of frames. A successful face detection is not an identity match. Each track ID is temporary and applies only to one analysis run.
 
+Individual uploads are limited to 100 MB by the Streamlit configuration.
+
 ## Tests
 
 ```powershell
@@ -44,10 +46,12 @@ These tests cover anonymous tracking rules, observed-time attendance, activity p
 
 ## Data handling
 
-Video and audio are processed by the local Streamlit process. The audio module calculates signal levels only; speech content is not recognized. Uploaded video is held temporarily during analysis and deleted when processing completes. If the application is forcibly stopped, the operating system may retain a temporary file. Session history is opt-in and stores aggregate counts/settings only. The application makes no cloud API calls.
+When run locally, video and audio are processed by the local Streamlit process. In the hosted demo, selecting a file uploads it to the Streamlit Community Cloud app for processing. The hosted page displays this notice before revealing its upload controls. The audio module calculates signal levels only; speech content is not recognized. The app creates a temporary server-side video copy for analysis and deletes it after processing; an abrupt stop can leave that temporary copy behind. Optional session history stores aggregate counts/settings in the app's SQLite database, not raw media. Hosted storage is not a durable archive. The app makes no cloud AI API calls.
+
+Do not upload classroom media unless you are authorized to share it and have obtained required consent. Use the local version when media must remain on your own device.
 
 Before using any classroom analytics tool with real people, obtain required consent, set a suitable retention policy, and follow applicable school policy and law. Treat outputs as uncertain measurements for teacher review, never as automatic decisions about students.
 
 ## Repository
 
-This is a standalone repository: [AryanGpt59/eduai](https://github.com/AryanGpt59/eduai). It is not a fork. No license has been selected; add one only after choosing the reuse terms you want to grant. No hosted demo has been published.
+This is a standalone repository: [AryanGpt59/eduai](https://github.com/AryanGpt59/eduai). It is not a fork. No license has been selected; add one only after choosing the reuse terms you want to grant. The Streamlit Community Cloud demo is being set up; add its verified URL here after deployment.
