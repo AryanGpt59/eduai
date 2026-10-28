@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/secrets.toml
+*.sqlite3
+*.db
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wav
+.DS_Store

@@ -1,0 +1,5 @@
+streamlit>=1.39,<2
+opencv-python-headless>=4.10,<5
+numpy>=1.26,<3
+pandas>=2.2,<4
+soundfile>=0.12,<1
